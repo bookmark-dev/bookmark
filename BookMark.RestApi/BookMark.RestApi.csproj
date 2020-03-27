@@ -4,5 +4,14 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SwashBuckle.AspNetCore" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BookMark.Domain\BookMark.Domain.csproj" />
+    <ProjectReference Include="..\BookMark.OrmData\BookMark.OrmData.csproj" />
+  </ItemGroup>
+
 
 </Project>
