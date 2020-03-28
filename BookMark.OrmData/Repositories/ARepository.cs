@@ -11,12 +11,12 @@ namespace BookMark.OrmData.Repositories {
 		}
 		public abstract List<T> All();
 		public abstract T Get(long ID);
-		public bool Post(T model) {
+		public virtual bool Post(T model) {
 			DbSet<T> table = _ctx.Set<T>();
 			table.Add(model);
 			return _ctx.SaveChanges() >= 1;
 		}
-		public bool Put(T model) {
+		public virtual bool Put(T model) {
 			T found = this.Get(model.GetID());
 			if (found != null) {
 				found = model;
@@ -24,7 +24,7 @@ namespace BookMark.OrmData.Repositories {
 			}
 			return false;
 		}
-		public bool Delete(T model) {
+		public virtual bool Delete(T model) {
 			DbSet<T> table = _ctx.Set<T>();
 			table.Remove(model);
 			return _ctx.SaveChanges() >= 1;

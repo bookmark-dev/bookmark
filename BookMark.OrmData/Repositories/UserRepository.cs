@@ -17,9 +17,31 @@ namespace BookMark.OrmData.Repositories {
 			DbSet<User> table = _ctx.Set<User>();
 			return table.SingleOrDefault(u => u.UserID == ID);
 		}
+		public override bool Post(User user) {
+			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+			DbSet<User> table = _ctx.Set<User>();
+			table.Add(user);
+			return _ctx.SaveChanges() >= 1;
+		}
+		public override bool Put(User user) {
+			User found = this.Get(user.UserID);
+			if (found != null) {
+				found = user;
+				found.Password = BCrypt.Net.BCrypt.HashPassword(found.Password);
+				return _ctx.SaveChanges() >= 1;
+			}
+			return false;
+		}
 		public User FindByName(string name) {
 			DbSet<User> table = _ctx.Set<User>();
 			return table.Where(u => u.Name == name).First();
+		}
+		public bool CheckCredentials(string name, string password) {
+			User user = this.FindByName(name);
+			if (user != null) {
+				return BCrypt.Net.BCrypt.Verify(password, user.Password);
+			}
+			return false;
 		}
 	}
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using BCrypt.Net;
 using BookMark.Domain.Models;
 using BookMark.OrmData.Databases;
 using BookMark.OrmData.Repositories;
@@ -20,17 +18,11 @@ namespace BookMark.OrmData.Services {
 			return _ur.Get(ID);
 		}
 		// POST
-		public bool PostUser(string name, string submitted_password) {
-			string password = BCrypt.Net.BCrypt.HashPassword(submitted_password);
-			User user = new User() { 
-				Name = name,
-				Password = password
-			};
+		public bool PostUser(User user) {
 			return _ur.Post(user);
 		}
 		// PUT
 		public bool PutUser(User user) {
-			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 			return _ur.Put(user);
 		}
 		// DELETE
@@ -41,12 +33,12 @@ namespace BookMark.OrmData.Services {
 		public User FindUserByName(string name) {
 			return _ur.FindByName(name);
 		}
-		public bool CheckUserCredentials(string name, string submitted_password) {
+		public bool CheckUserExists(string name) {
 			User user = this.FindUserByName(name);
-			if (user != null) {
-				return BCrypt.Net.BCrypt.Verify(submitted_password, user.Password);
-			}
-			return false;
+			return user != null;
+		}
+		public bool CheckUserCredentials(string name, string password) {
+			return _ur.CheckCredentials(name, password);
 		}
 	}
 }
