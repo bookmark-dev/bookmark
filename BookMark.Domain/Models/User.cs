@@ -1,4 +1,5 @@
 using System;
+using BCrypt.Net;
 using BookMark.Domain.Abstracts;
 
 namespace BookMark.Domain.Models {
@@ -11,6 +12,9 @@ namespace BookMark.Domain.Models {
 		}
 		public override long GetID() {
 			return UserID;
+		}
+		public bool CheckCredentials(string password) {
+			return BCrypt.Net.BCrypt.Verify(password, this.Password);
 		}
 	}
 }

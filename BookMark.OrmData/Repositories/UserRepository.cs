@@ -34,12 +34,16 @@ namespace BookMark.OrmData.Repositories {
 		}
 		public User FindByName(string name) {
 			DbSet<User> table = _ctx.Set<User>();
-			return table.Where(u => u.Name == name).First();
+			IQueryable<User> query = table.Where(u => u.Name == name);
+			if (query.Count() == 0) {
+				return null;
+			}
+			return query.First();
 		}
 		public bool CheckCredentials(string name, string password) {
 			User user = this.FindByName(name);
 			if (user != null) {
-				return BCrypt.Net.BCrypt.Verify(password, user.Password);
+				return user.CheckCredentials(password);
 			}
 			return false;
 		}

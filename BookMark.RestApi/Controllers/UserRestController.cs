@@ -7,14 +7,13 @@ using BookMark.OrmData.Services;
 
 namespace BookMark.RestApi.Controllers {
 	[ApiController]
-	[Route("/api/users")]
 	[EnableCors()]
 	public class UserRestController : ControllerBase {
 		private BookMarkService _srv;
 		public UserRestController(BookMarkService srv) {
 			_srv = srv;
 		}
-		[HttpGet]
+		[HttpGet("/api/user")]
 		public IActionResult Get() {
 			List<User> users = _srv.AllUsers();
 			if (users.Count > 0) {
@@ -22,7 +21,7 @@ namespace BookMark.RestApi.Controllers {
 			}
 			return NotFound("No users exist!");
 		}
-		[HttpGet("{id}")]
+		[HttpGet("/api/user/{id}")]
 		public IActionResult Get(string id) {
 			long ID = 0;
 			if (long.TryParse(id, out ID)) {
@@ -34,7 +33,18 @@ namespace BookMark.RestApi.Controllers {
 			}
 			return BadRequest("Couldn't parse user ID!");
 		}
-		[HttpPost]
+		[HttpGet("/api/user/name/{name}")]
+		public IActionResult GetName(string name) {
+			if (name.Length == 0) {
+				return BadRequest("Name is invalid!");
+			}
+			User user = _srv.FindUserByName(name);
+			if (user == null) {
+				return NotFound($"Couldn't find user with name: {name}");
+			}
+			return Ok(user);
+		}
+		[HttpPost("/api/user")]
 		public IActionResult Post(UserRestModel model) {
 			if (ModelState.IsValid) {
 				if (!_srv.CheckUserExists(model.Name)) {
@@ -51,7 +61,7 @@ namespace BookMark.RestApi.Controllers {
 			}
 			return BadRequest("User model is invalid!");
 		}
-		[HttpPut]
+		[HttpPut("/api/user")]
 		public IActionResult Put(UserRestModel model) {
 			if (ModelState.IsValid) {
 				if (_srv.CheckUserExists(model.Name)) {
@@ -68,7 +78,7 @@ namespace BookMark.RestApi.Controllers {
 			}
 			return BadRequest("User model is invalid!");
 		}
-		[HttpDelete("{id}")]
+		[HttpDelete("/api/user/{id}")]
 		public IActionResult Delete(string id) {
 			long ID = 0;
 			if (long.TryParse(id, out ID)) {

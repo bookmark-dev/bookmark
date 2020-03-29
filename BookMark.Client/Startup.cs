@@ -22,6 +22,7 @@ namespace BookMark.Client {
                 options.Cookie.IsEssential = true;
             });
             services.AddControllersWithViews();
+            services.AddHttpClient();
             services.AddHttpContextAccessor();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
