@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BookMark.Client\BookMark.Client.csproj" />
     <ProjectReference Include="..\BookMark.Domain\BookMark.Domain.csproj" />
     <ProjectReference Include="..\BookMark.RestApi\BookMark.RestApi.csproj" />
   </ItemGroup>

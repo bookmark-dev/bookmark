@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using BookMark.Domain.Models;
 
@@ -23,7 +24,7 @@ namespace BookMark.OrmData.Databases {
 			builder.Entity<UserAppointment>().HasOne(ua => ua.Appointment).WithMany(a => a.UserAppointments).HasForeignKey(a => a.AppointmentID);
 			// Seed Data
 			User[] users = new User[] {
-				new User() { UserID = 1, Name = "synaodev", Password = "tylercadena" }
+				new User() { UserID = 1, Name = "synaodev", Password = BCrypt.Net.BCrypt.HashPassword("tylercadena") }
 			};
 			builder.Entity<User>().HasData(users);
 		}

@@ -28,12 +28,11 @@ namespace BookMark.Client.Controllers {
             if (result == null) {
                 return View();
             }
-            return Redirect($"/users/{result.UserID}");
+            return Redirect($"/users/index");
         }
         public IActionResult Privacy() {
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
