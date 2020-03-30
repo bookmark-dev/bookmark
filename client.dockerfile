@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
-WORKDIR p1/
+WORKDIR client-p2/
 COPY . .
 RUN dotnet build
 RUN dotnet publish --configuration Release -o out BookMark.Client/BookMark.Client.csproj
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-WORKDIR dist/
-COPY --from=build p1/out/ ./
+WORKDIR client-dist/
+COPY --from=build client-p2/out/ ./
 CMD ["dotnet", "BookMark.Client.dll"]

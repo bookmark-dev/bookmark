@@ -1,0 +1,22 @@
+networks:
+  skynet
+
+services: 
+  client: 
+    build: 
+      context: BookMark.Client
+      dockerfile: client.dockerfile
+    ports: 
+      - 8000:80
+    networks: 
+      - skynet
+  restapi: 
+    build: 
+      context: BookMark.RestApi
+      dockerfile: restapi.dockerfile
+    ports:
+      - 5000:80
+    networks: 
+      - skynet
+
+version: "3.7"
