@@ -34,7 +34,7 @@ stages:
               dotnet build
               dotnet test
               dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
-            environment:
+            env:
               SONAR_LOGIN: $(sonar.login)
       - job: analyze_restapi
         pool:
@@ -48,7 +48,7 @@ stages:
               dotnet build
               dotnet test
               dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
-            environment:
+            env:
               SONAR_LOGIN: $(sonar.login)
   - stage: pack
     jobs:
