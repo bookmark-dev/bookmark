@@ -59,8 +59,8 @@ stages:
               command: login
               containerRegistry: docker
           - script: |
-              docker image build --file client.dockerfile --tag tcfirstproj/bookmark BookMark.Client
-              docker image push tcfirstproj/bookmark
+              docker image build --file client.dockerfile --tag tylercadena/bookmark BookMark.Client
+              docker image push tylercadena/bookmark
           - task: Docker@2
             inputs:
               command: logout
@@ -72,8 +72,8 @@ stages:
               command: login
               containerRegistry: docker
           - script: |
-              docker image build --file restapi.dockerfile --tag tcfirstproj/bookmark BookMark.RestApi
-              docker image push tcfirstproj/bookmark
+              docker image build --file restapi.dockerfile --tag tylercadena/bookmark BookMark.RestApi
+              docker image push tylercadena/bookmark
           - task: Docker@2
             inputs:
               command: logout
