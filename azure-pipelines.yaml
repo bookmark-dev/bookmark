@@ -1,0 +1,98 @@
+name: $(date:yyyyMMdd)$(rev:.rr)
+
+pr:
+  - master
+
+stages:
+  - stage: build
+    jobs:
+      - job: build_client
+        steps:
+          - script: dotnet build --project BookMark.Client/*.csproj
+      - job: build_restapi
+        steps:
+          - script: dotnet build --project BookMark.RestApi/*.csproj
+  - stage: test
+    jobs:
+      - job: test_client
+        steps:
+          - script: dotnet test --filter UnitTestClient
+      - job: test_restapi
+        steps:
+          - script: dotnet test --filter UnitTestRestApi
+  - stage: analyze
+    jobs:
+      - job: analyze_client
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DotnetGlobalToolInstaller@0
+            inputs:
+              name: "dotnet-sonarscanner"
+          - script: |
+              dotnet sonarscanner begin /k: /n: /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
+              dotnet build
+              dotnet test
+              dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
+            environment:
+              SONAR_LOGIN: $(sonar.login)
+      - job: analyze_restapi
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DotnetGlobalToolInstaller@0
+            inputs:
+              name: "dotnet-sonarscanner"
+          - script: |
+              dotnet sonarscanner begin /k: /n: /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
+              dotnet build
+              dotnet test
+              dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
+            environment:
+              SONAR_LOGIN: $(sonar.login)
+  - stage: pack
+    jobs:
+      - job: pack_client
+        steps:
+          - task: Docker@2
+            inputs:
+              command: login
+              containerRegistry: docker
+          - script: |
+              docker image build --file client.dockerfile --tag tcfirstproj/bookmark BookMark.Client
+              docker image push tcfirstproj/bookmark
+          - task: Docker@2
+            inputs:
+              command: logout
+              containerRegistry: docker
+      - job: pack_restapi
+        steps:
+          - task: Docker@2
+            inputs:
+              command: login
+              containerRegistry: docker
+          - script: |
+              docker image build --file restapi.dockerfile --tag tcfirstproj/bookmark BookMark.RestApi
+              docker image push tcfirstproj/bookmark
+          - task: Docker@2
+            inputs:
+              command: logout
+              containerRegistry: docker
+  - stage: deployment
+    jobs:
+      - job: deploy_app
+        steps:
+          - task: DockerCompose@0
+            displayName: Run services
+            inputs:
+              action: Run services
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              containerRegistryType: Container Registry
+              dockerComposeFile: docker-compose.yaml
+              projectName: $(Build.Repository.Name)
+              qualifyImageNames: true
+              buildImages: false
+              detached: false
+
+trigger:
+  - master

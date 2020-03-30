@@ -6,6 +6,7 @@ services:
     build: 
       context: BookMark.Client
       dockerfile: client.dockerfile
+    image: tcfirstproj/bookmark
     ports: 
       - 8000:80
     networks: 
@@ -14,6 +15,7 @@ services:
     build: 
       context: BookMark.RestApi
       dockerfile: restapi.dockerfile
+    image: tcfirstproj/bookmark
     ports:
       - 5000:80
     networks: 
