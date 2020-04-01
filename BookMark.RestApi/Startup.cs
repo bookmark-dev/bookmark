@@ -22,8 +22,7 @@ namespace BookMark.RestApi {
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
-            // services.AddDbContext<BookMarkDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("main")));
-            services.AddDbContext<BookMarkDbContext>(opt => opt.UseSqlServer("server=localhost;database=bookmarkdb;user id=sa;password=Password12345"));
+            services.AddDbContext<BookMarkDbContext>(opt => opt.UseSqlServer(@"data source=bmdb;database=bookmarkdb;user id=sa;password=Password12345;"));
             services.AddScoped<BookMarkService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BookMarkDbContext context) {
