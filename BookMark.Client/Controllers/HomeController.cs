@@ -28,7 +28,7 @@ namespace BookMark.Client.Controllers {
             if (result == null) {
                 return View();
             }
-            return Redirect($"/users/index");
+            return Redirect("/user/index");
         }
         public IActionResult Privacy() {
             return View();
