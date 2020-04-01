@@ -1,24 +1,39 @@
+version: "3.7"
+
 networks:
   skynet:
 
 services:
-  client:
-    build: 
-      context: BookMark.Client
-      dockerfile: client.dockerfile
-    image: tylercadena/bookmark-client
-    ports:
-      - 8000:80
-    networks:
+  database:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment: 
+      ACCEPT_EULA: "y"
+      SA_PASSWORD: "Password12345"
+    build: .
+    ports: 
+      - 1433:1433
+    networks: 
       - skynet
   restapi:
-    build: 
-      context: BookMark.RestApi
-      dockerfile: restapi.dockerfile
+    depends_on: 
+      - database
     image: tylercadena/bookmark-restapi
+    build: 
+      context: .
+      dockerfile: restapi.dockerfile
     ports:
       - 5000:80
     networks:
       - skynet
-
-version: "3.7"
+  # client:
+  #   depends_on: 
+  #     - database
+  #     - restapi
+  #   image: tylercadena/bookmark-client
+  #   build: 
+  #     context: .
+  #     dockerfile: client.dockerfile
+  #   ports:
+  #     - 8000:80
+  #   networks:
+  #     - skynet

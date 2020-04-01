@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as build
-WORKDIR /application
+WORKDIR restapi-p2/
 COPY . .
 RUN dotnet build
-RUN dotnet publish --configuration Release -o out BookMark.RestApi/BookMark.RestApi.csproj
+RUN dotnet publish -c Release -o out BookMark.RestApi/BookMark.RestApi.csproj
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-WORKDIR /www
-COPY --from=build /application/out .
-CMD ["dotnet", "BookMark.RestApi.dll"]
+WORKDIR restapi-dist/
+COPY --from=build restapi-p2/out/ ./
+CMD [ "dotnet", "BookMark.RestApi.dll" ]
