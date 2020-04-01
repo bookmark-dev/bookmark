@@ -1,24 +1,24 @@
 networks:
-  skynet
+  skynet:
 
-services: 
-  client: 
+services:
+  client:
     build: 
       context: BookMark.Client
       dockerfile: client.dockerfile
-    image: tylercadena/bookmark
-    ports: 
+    image: tylercadena/bookmark-client
+    ports:
       - 8000:80
-    networks: 
+    networks:
       - skynet
-  restapi: 
+  restapi:
     build: 
       context: BookMark.RestApi
       dockerfile: restapi.dockerfile
-    image: tylercadena/bookmark
+    image: tylercadena/bookmark-restapi
     ports:
       - 5000:80
-    networks: 
+    networks:
       - skynet
 
 version: "3.7"

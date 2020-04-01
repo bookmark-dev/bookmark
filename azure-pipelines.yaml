@@ -1,7 +1,7 @@
-name: $(date:yyyyMMdd)$(rev:.rr)
-
 pr:
   - master
+
+name: $(date:yyyyMMdd)$(rev:.rr)
 
 stages:
   - stage: build
@@ -14,12 +14,9 @@ stages:
           - script: dotnet build --project BookMark.RestApi/*.csproj
   - stage: test
     jobs:
-      - job: test_client
+      - job: run_tests
         steps:
-          - script: dotnet test --filter UnitTestClient
-      - job: test_restapi
-        steps:
-          - script: dotnet test --filter UnitTestRestApi
+          - script: dotnet test
   - stage: analyze
     jobs:
       - job: analyze_client
@@ -30,9 +27,8 @@ stages:
             inputs:
               name: "dotnet-sonarscanner"
           - script: |
-              dotnet sonarscanner begin /k: /n: /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
+              dotnet sonarscanner begin /k:"bookmark-client" /o:"bookmark-dev" /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
               dotnet build
-              dotnet test
               dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
             env:
               SONAR_LOGIN: $(sonar.login)
@@ -44,9 +40,8 @@ stages:
             inputs:
               name: "dotnet-sonarscanner"
           - script: |
-              dotnet sonarscanner begin /k: /n: /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
+              dotnet sonarscanner begin /k:"bookmark-restapi" /o:"bookmark-dev" /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
               dotnet build
-              dotnet test
               dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
             env:
               SONAR_LOGIN: $(sonar.login)
@@ -59,8 +54,8 @@ stages:
               command: login
               containerRegistry: docker
           - script: |
-              docker image build --file client.dockerfile --tag tylercadena/bookmark BookMark.Client
-              docker image push tylercadena/bookmark
+              docker image build --file client.dockerfile --tag tylercadena/bookmark-client BookMark.Client
+              docker image push tylercadena/bookmark-client
           - task: Docker@2
             inputs:
               command: logout
@@ -72,13 +67,13 @@ stages:
               command: login
               containerRegistry: docker
           - script: |
-              docker image build --file restapi.dockerfile --tag tylercadena/bookmark BookMark.RestApi
-              docker image push tylercadena/bookmark
+              docker image build --file restapi.dockerfile --tag tylercadena/bookmark-restapi BookMark.RestApi
+              docker image push tylercadena/bookmark-restapi
           - task: Docker@2
             inputs:
               command: logout
               containerRegistry: docker
-  - stage: deployment
+  - stage: deploy
     jobs:
       - job: deploy_app
         steps:
@@ -86,11 +81,10 @@ stages:
             displayName: Run services
             inputs:
               action: Run services
-              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureSubscriptionEndpoint: $(azure.subscription)
               containerRegistryType: Container Registry
               dockerComposeFile: docker-compose.yaml
               projectName: $(Build.Repository.Name)
-              qualifyImageNames: true
               buildImages: false
               detached: false
 
