@@ -28,7 +28,7 @@ stages:
               dotnet build
               dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
             env:
-              SONAR_LOGIN: $(sonar.login)
+              SONAR_LOGIN: synaodev@github
   - stage: pack
     jobs:
       - job: pack_client
