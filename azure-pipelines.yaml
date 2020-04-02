@@ -64,17 +64,17 @@ stages:
           vmImage: ubuntu-18.04
         steps:
           - task: DockerCompose@0
-            displayName: Run services
+            displayName: Docker Compose Command
             inputs:
-              action: Run services
-              azureContainerRegistry: bookmarkregistry.azurecr.io
+              action: Run a Docker Compose command
               azureSubscriptionEndpoint: azure-resources
-              containerRegistryType: Azure Container Registry
+              azureContainerRegistry: bookmarkregistry.azurecr.io
               dockerComposeFile: docker-compose.yaml
-              dockerRegistryEndpoint: docker
+              dockerComposeCommand: up -d
               projectName: bookmark
-              buildImages: false
-              detached: false
+              qualifyImageNames: true
+              buildImages: true
+              detached: true
 
 trigger:
   - synaodev
