@@ -59,7 +59,9 @@ stages:
               containerRegistry: docker
   - stage: deploy
     jobs:
-      - job: deploy_app
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
         steps:
           - task: DockerCompose@0
             displayName: Run services
@@ -71,6 +73,14 @@ stages:
               projectName: $(Build.Repository.Name)
               buildImages: false
               detached: false
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: AzureRM
+              azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+              appType: webAppContainer
+              WebAppName: bookmark
+              DockerNamespace: tylercadena
+              DockerRepository: bookmark
 
 trigger:
   - azure-trouble
