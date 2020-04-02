@@ -1,5 +1,5 @@
 pr:
-  - azure-trouble
+  - synaodev
 
 name: $(date:yyyyMMdd)$(rev:.rr)
 
@@ -57,30 +57,31 @@ stages:
             inputs:
               command: logout
               containerRegistry: docker
-  # - stage: deploy
-  #   jobs:
-  #     - job:
-  #       pool:
-  #         vmImage: ubuntu-18.04
-  #       steps:
-  #         - task: DockerCompose@0
-  #           displayName: Run services
-  #           inputs:
-  #             action: Run services
-  #             azureSubscriptionEndpoint: $(azure.subscription)
-  #             containerRegistryType: Container Registry
-  #             dockerComposeFile: docker-compose.yaml
-  #             projectName: $(Build.Repository.Name)
-  #             buildImages: false
-  #             detached: false
-  #         - task: AzureRmWebAppDeployment@4
-  #           inputs:
-  #             ConnectionType: AzureRM
-  #             azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
-  #             appType: webAppContainer
-  #             WebAppName: bookmark
-  #             DockerNamespace: tylercadena
-  #             DockerRepository: bookmark
+  - stage: deploy
+    jobs:
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DockerCompose@0
+            displayName: Run services
+            inputs:
+              action: Run services
+              azureContainerRegistry: bookmarkregistry
+              azureSubscriptionEndpoint: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+              containerRegistryType: Container Registry
+              dockerComposeFile: docker-compose.yaml
+              projectName: bookmark
+              buildImages: false
+              detached: false
+          # - task: AzureRmWebAppDeployment@4
+          #   inputs:
+          #     ConnectionType: AzureRM
+          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+          #     appType: webAppContainer
+          #     WebAppName: bookmark
+          #     DockerNamespace: synaodev
+          #     DockerRepository: bookmark
 
 trigger:
-  - azure-trouble
+  - synaodev
