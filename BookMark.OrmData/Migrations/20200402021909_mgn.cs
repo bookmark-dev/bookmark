@@ -60,7 +60,7 @@ namespace BookMark.OrmData.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Name", "Password" },
-                values: new object[] { 1L, "synaodev", "$2a$11$4F2XR7OSBxRwIk5YNaFizOfoe2zp2w2KvM62gCJ.4QDlMFhQku4ki" });
+                values: new object[] { 1L, "synaodev", "$2a$11$ygV8d1uNHxNcdIH1S0m/aORPyeJ7I6.UBCJ.35j.C8O9K9Dyy6bYy" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAppointment_AppointmentID",

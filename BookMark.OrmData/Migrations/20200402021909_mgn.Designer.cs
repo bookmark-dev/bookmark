@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMark.OrmData.Migrations
 {
     [DbContext(typeof(BookMarkDbContext))]
-    [Migration("20200329225309_mgn")]
+    [Migration("20200402021909_mgn")]
     partial class mgn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace BookMark.OrmData.Migrations
                         {
                             UserID = 1L,
                             Name = "synaodev",
-                            Password = "$2a$11$4F2XR7OSBxRwIk5YNaFizOfoe2zp2w2KvM62gCJ.4QDlMFhQku4ki"
+                            Password = "$2a$11$ygV8d1uNHxNcdIH1S0m/aORPyeJ7I6.UBCJ.35j.C8O9K9Dyy6bYy"
                         });
                 });
 

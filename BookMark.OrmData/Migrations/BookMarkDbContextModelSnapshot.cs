@@ -52,7 +52,7 @@ namespace BookMark.OrmData.Migrations
                         {
                             UserID = 1L,
                             Name = "synaodev",
-                            Password = "$2a$11$4F2XR7OSBxRwIk5YNaFizOfoe2zp2w2KvM62gCJ.4QDlMFhQku4ki"
+                            Password = "$2a$11$ygV8d1uNHxNcdIH1S0m/aORPyeJ7I6.UBCJ.35j.C8O9K9Dyy6bYy"
                         });
                 });
 

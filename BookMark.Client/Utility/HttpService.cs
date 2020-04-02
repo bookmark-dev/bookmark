@@ -26,8 +26,12 @@ namespace BookMark.Client.Utility {
 				};
 			}
 			if (client == null) {
+				string base_url = Environment.GetEnvironmentVariable("RestApiUrl");
+				if (base_url == null) {
+					base_url = "http://localhost:5000";
+				}
 				client = new HttpClient(handler);
-				client.BaseAddress = new Uri("https://127.0.0.1:5001");
+				client.BaseAddress = new Uri(base_url);
 			}
 		}
 	}

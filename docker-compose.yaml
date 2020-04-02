@@ -5,7 +5,7 @@ networks:
 
 services:
   database:
-    container_name: bmdb
+    container_name: ormdata
     image: mcr.microsoft.com/mssql/server:2017-latest
     environment: 
       ACCEPT_EULA: "y"
@@ -22,6 +22,8 @@ services:
     depends_on: 
       - database
     image: tylercadena/bookmark-restapi
+    environment: 
+      RestApiUrl: "http://restapi"
     build: 
       context: .
       dockerfile: restapi.dockerfile
@@ -33,12 +35,15 @@ services:
       - skynet
     links: 
       - database
+    restart: always
   client:
     container_name: client
     depends_on: 
       - database
       - restapi
     image: tylercadena/bookmark-client
+    environment: 
+      RestApiUrl: "http://restapi"
     build: 
       context: .
       dockerfile: client.dockerfile

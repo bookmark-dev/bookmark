@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +23,12 @@ namespace BookMark.RestApi {
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
-            services.AddDbContext<BookMarkDbContext>(opt => opt.UseSqlServer(@"data source=bmdb;database=bookmarkdb;user id=sa;password=Password12345;"));
+            string docker = Environment.GetEnvironmentVariable("RestApiUrl");
+            if (docker == null) {
+                services.AddDbContext<BookMarkDbContext>(opt => opt.UseSqlServer("server=localhost,1433;database=bookmarkdb;user id=sa;password=Password12345;"));
+            } else {
+                services.AddDbContext<BookMarkDbContext>(opt => opt.UseSqlServer(@"data source=ormdata;database=bookmarkdb;user id=sa;password=Password12345;"));
+            }
             services.AddScoped<BookMarkService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BookMarkDbContext context) {
