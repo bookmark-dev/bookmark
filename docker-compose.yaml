@@ -21,7 +21,7 @@ services:
     container_name: restapi
     depends_on: 
       - database
-    image: tylercadena/bookmark-restapi
+    image: synaodev/bookmark-restapi
     environment: 
       RestApiUrl: "http://restapi"
     build: 
@@ -41,7 +41,7 @@ services:
     depends_on: 
       - database
       - restapi
-    image: tylercadena/bookmark-client
+    image: synaodev/bookmark-client
     environment: 
       RestApiUrl: "http://restapi"
     build: 
