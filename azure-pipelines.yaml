@@ -1,5 +1,5 @@
 pr:
-  - synaodev
+  - master
 
 name: $(date:yyyyMMdd)$(rev:.rr)
 
@@ -84,4 +84,4 @@ stages:
           #     DockerRepository: bookmark
 
 trigger:
-  - synaodev
+  - master
