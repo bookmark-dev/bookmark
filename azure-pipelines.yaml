@@ -24,11 +24,9 @@ stages:
             inputs:
               name: "dotnet-sonarscanner"
           - script: |
-              dotnet sonarscanner begin /k:"bookmark-client" /o:"bookmark-dev" /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN
+              dotnet sonarscanner begin /k:"bookmark-client" /o:"bookmark-dev" /d:sonar.host.url="https://sonarcloud.io/" /d:sonar.login=$SONAR_LOGIN d:/sonar.password=$SONAR_PASSWORD
               dotnet build
-              dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN
-            env:
-              SONAR_LOGIN: $(sonar.login)
+              dotnet sonarscanner end /d:sonar.login=$SONAR_LOGIN /d:sonar.password=$SONAR_PASSWORD
   - stage: pack
     jobs:
       - job: pack_client
